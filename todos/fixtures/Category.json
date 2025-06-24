@@ -1,0 +1,57 @@
+[
+  {
+    "model": "todos.category",
+    "pk": 1,
+    "fields": {
+      "name": "Work",
+      "slug": "work",
+      "description": "Tasks related to your job or career.",
+      "created_at": "2025-06-19T10:00:00Z",
+      "updated_at": "2025-06-19T10:00:00Z"
+    }
+  },
+  {
+    "model": "todos.category",
+    "pk": 2,
+    "fields": {
+      "name": "Personal",
+      "slug": "personal",
+      "description": "Personal errands and daily chores.",
+      "created_at": "2025-06-19T10:01:00Z",
+      "updated_at": "2025-06-19T10:01:00Z"
+    }
+  },
+  {
+    "model": "todos.category",
+    "pk": 3,
+    "fields": {
+      "name": "Fitness",
+      "slug": "fitness",
+      "description": "Exercise, diet, and health goals.",
+      "created_at": "2025-06-19T10:02:00Z",
+      "updated_at": "2025-06-19T10:02:00Z"
+    }
+  },
+  {
+    "model": "todos.category",
+    "pk": 4,
+    "fields": {
+      "name": "Study",
+      "slug": "study",
+      "description": "Academic tasks and learning goals.",
+      "created_at": "2025-06-19T10:03:00Z",
+      "updated_at": "2025-06-19T10:03:00Z"
+    }
+  },
+  {
+    "model": "todos.category",
+    "pk": 5,
+    "fields": {
+      "name": "Others",
+      "slug": "others",
+      "description": "Everything else that doesn’t fit above.",
+      "created_at": "2025-06-19T10:04:00Z",
+      "updated_at": "2025-06-19T10:04:00Z"
+    }
+  }
+]

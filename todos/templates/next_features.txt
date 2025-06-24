@@ -1,0 +1,39 @@
+🌟 Suggested Features to Add
+1. Due Date Reminders (Email/Notification)
+Use Django Q or Celery for sending daily email reminders for upcoming/overdue tasks.
+
+Or simpler: show a “Due Today” badge on dashboard.
+
+2. Task Completion Toggle with AJAX
+Let users click a checkbox or button to toggle task completion without reloading the page.
+
+Use fetch() or jQuery + Django views.
+
+3. Subtasks
+Add a SubTask model with a foreign key to Task.
+
+Useful for breaking a big task into smaller steps.
+
+4. File Attachments
+Let users upload files/images (e.g. notes or documents) to each task.
+
+5. Calendar View
+Use FullCalendar or render tasks by due date in a calendar format.
+
+6. Tag System
+Add tagging with something like django-taggit.
+
+Let users search/filter tasks by tags like "urgent", "home", "meeting".
+
+7. Dark Mode Toggle
+Use JavaScript + Bootstrap theme switch to support dark/light UI.
+
+8. Progress Bar / Task Stats
+Show a visual progress bar:
+Completed Tasks / Total Tasks.
+
+9. Notes or Comments on Tasks
+Allow users to leave personal notes or updates on a task.
+
+10. Task Sharing or Collaboration
+Let users invite others to collaborate on a task (good for teams).

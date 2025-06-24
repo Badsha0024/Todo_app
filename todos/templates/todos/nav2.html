@@ -1,0 +1,64 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center">
+      <img src="{% static 'todos/logo.png' %}" alt="Logo" height="32" class="rounded-circle" />
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'dashboard' %}"><strong>Dashboard</strong></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'task_list' %}"><strong>My Task</strong></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'create_task' %}"><strong>Add Task</strong></a>
+        </li>
+
+        
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><strong>Categories</strong></a>
+          <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+
+              <li> <a class="dropdown-item" href="{% url 'category_todos' 1 %}">     Work     </a></li>
+              <li> <a class="dropdown-item" href="{% url 'category_todos' 2 %}"> Personal </a></li>
+              <li> <a class="dropdown-item" href="{% url 'category_todos' 2 %}">   Fitness   </a></li>
+              <li> <a class="dropdown-item" href="{% url 'category_todos' 4 %}">   Study   </a></li>
+              <li> <a class="dropdown-item" href="{% url 'category_todos' 5 %}">   Others   </a></li>
+              
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Search -->
+      <form class="d-flex me-3" method="get" action="{% url 'search_tasks' %}">
+        <input class="form-control me-2" type="search" name="q" placeholder="Search..." required />
+        {% comment %} <button class="btn btn-light" type="submit">Go</button> {% endcomment %}
+        <button class="btn btn-light" type="submit" aria-label="Search"><span role="img" aria-label="Search">🔍</span></button>
+      </form>
+
+      <!-- Auth Buttons -->
+      {% if user.is_authenticated %}
+        <div class="dropdown">
+          <a class="btn btn-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{{ user.username }}</a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
+            </li>
+          </ul>
+        </div>
+      {% else %}
+        <a class="btn btn-outline-light me-2" href="{% url 'login' %}">Login</a>
+        <a class="btn btn-warning" href="{% url 'register' %}">Register</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

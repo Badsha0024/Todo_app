@@ -1,0 +1,100 @@
+{% extends 'todos/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <p class="lead">Manage your tasks efficiently and stay organized.</p>
+  <div class="container py-5">
+    <!-- Search Field -->
+    <form method="get" action="{% url 'search_tasks' %}" class="mb-4 d-flex justify-content-center">
+      <div class="input-group shadow-sm" style="max-width: 700px; width: 100%;">
+        <input type="text" name="q" class="form-control form-control-lg rounded-start" placeholder="🔍 Search tasks..." required />
+        <button class="btn btn-outline-primary btn-lg rounded-end" type="submit">Go</button>
+      </div>
+    </form>
+
+    <!-- Add Task Field -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="m-0">Welcome, {{ user.username }} 👋</h2>
+      <a href="{% url 'create_task' %}" class="btn btn-primary">➕ Add New Task</a>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <a href="{% url 'task_list' %}" class="text-decoration-none text-dark">
+          <div class="card shadow-sm bg-light text-center p-3">
+            <h5 class="text-muted"><strong>Total Tasks</strong></h5>
+            <h2>{{ total_tasks|default:' Empty' }}</h2>
+            {% comment %} <h2 class="text-info">31</h2> {% endcomment %}
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <a href="{% url 'completed_tasks' %}" class="text-decoration-none text-dark">
+          <div class="card shadow-sm bg-light text-center p-3">
+            <h5 class="text-muted"><strong>Completed</strong></h5>
+            <h2>{{ completed_tasks | default:' Empty' }}</h2>
+            {% comment %} <h2 class="text-success">12</h2> {% endcomment %}
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <a href="{% url 'upcoming_tasks' %}" class="text-decoration-none text-dark">
+          <div class="card shadow-sm bg-light text-center p-3">
+            <h5 class="text-muted"><strong>Upcoming</strong></h5>
+            <h2>{{ upcoming_tasks | default:' Empty' }}</h2>
+            {% comment %} <h2 class="text-warning">14</h2> {% endcomment %}
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <a href="{% url 'overdue_tasks' %}" class="card-link text-decoration-none text-dark">
+          <div class="card shadow-sm bg-light text-center p-3">
+            <h5 class="text-muted"><strong>Overdue</strong></h5>
+            <h2 class="text-danger">{{ overdue_tasks|default:' Empty' }}</h2>
+            {% comment %} <h2 class="text-danger">5</h2> {% endcomment %}
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Recent Tasks -->
+    <div class="mt-5">
+      <h4>Your Recent Tasks</h4>
+      <ul class="list-group">
+        {% for todo in recent_todos %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ todo.title }}
+            <small class="text-muted">{{ todo.due_date }}</small>
+          </li>
+        {% empty %}
+          <li class="list-group-item text-muted text-center">No recent tasks</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Dummy Recent Tasks -->
+    <div class="mt-5">
+      <h4>Recent Tasks</h4>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Finish assignment
+          <small class="text-muted">June 20, 2025</small>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Grocery shopping
+          <small class="text-muted">June 19, 2025</small>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Call manager
+          <small class="text-muted">June 21, 2025</small>
+        </li>
+        <li class="list-group-item text-muted text-center">No more recent tasks</li>
+      </ul>
+    </div>
+  </div>
+{% endblock %}

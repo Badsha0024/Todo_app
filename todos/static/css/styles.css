@@ -1,0 +1,9 @@
+.card-link {
+  display: block;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.card-link:hover {
+  transform: scale(1.02);
+}

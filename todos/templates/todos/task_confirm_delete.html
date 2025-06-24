@@ -1,0 +1,46 @@
+{% extends 'todos/base.html' %}
+{% load static %}
+
+{% block content %}
+  <!-- Delete Button that triggers modal -->
+  {% comment %} <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ task.pk }}">Delete</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="deleteModal{{ task.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ task.pk }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="deleteModalLabel{{ task.pk }}">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete the task: <strong>{{ task.title }}</strong>?
+        </div>
+        <div class="modal-footer">
+          <form method="post" action="{% url 'delete_task' task.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+          </form>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div> {% endcomment %}
+
+  <div class="container py-5">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <h3>⚠️ Confirm Delete</h3>
+        <p>
+          Are you sure you want to delete the task: <strong>{{ task.title }}</strong>?
+        </p>
+
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Yes, Delete</button>
+          <a href="{% url 'task_list' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
