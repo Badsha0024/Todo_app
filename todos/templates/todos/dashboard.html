@@ -5,13 +5,21 @@
 {% block content %}
   <p class="lead">Manage your tasks efficiently and stay organized.</p>
   <div class="container py-5">
-    <!-- Search Field -->
-    <form method="get" action="{% url 'search_tasks' %}" class="mb-4 d-flex justify-content-center">
-      <div class="input-group shadow-sm" style="max-width: 700px; width: 100%;">
-        <input type="text" name="q" class="form-control form-control-lg rounded-start" placeholder="🔍 Search tasks..." required />
-        <button class="btn btn-outline-primary btn-lg rounded-end" type="submit">Go</button>
-      </div>
-    </form>
+
+     <!-- Search and Filter -->
+    <form method="get" class="row mb-4" action="{% url 'search_tasks' %}">
+    <div class="col-md-8 mb-2 mb-md-0">
+      <input type="text" name="q" class="form-control" placeholder="🔍 Search tasks..." value="{{ request.GET.q }}">
+    </div>
+    <div class="col-md-4">
+      <select name="category" class="form-select" onchange="this.form.submit()">
+        <option value="">📂 Filter by Category</option>
+        {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
 
     <!-- Add Task Field -->
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -22,9 +30,9 @@
     <!-- Dashboard Cards -->
     <div class="row g-4">
       <div class="col-md-6 col-lg-3">
-        <a href="{% url 'task_list' %}" class="text-decoration-none text-dark">
+        <a href="{% url 'task_list' %}?source=AllTasks" class="text-decoration-none text-dark">
           <div class="card shadow-sm bg-light text-center p-3">
-            <h5 class="text-muted"><strong>Total Tasks</strong></h5>
+            <h5 class="text-muted"><strong>All Tasks</strong></h5>
             <h2>{{ total_tasks|default:' Empty' }}</h2>
             {% comment %} <h2 class="text-info">31</h2> {% endcomment %}
           </div>
@@ -62,39 +70,46 @@
       </div>
     </div>
 
+
     <!-- Recent Tasks -->
+    {% if recent_todos %}
     <div class="mt-5">
       <h4>Your Recent Tasks</h4>
+
       <ul class="list-group">
-        {% for todo in recent_todos %}
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{ todo.title }}
-            <small class="text-muted">{{ todo.due_date }}</small>
-          </li>
-        {% empty %}
-          <li class="list-group-item text-muted text-center">No recent tasks</li>
-        {% endfor %}
+          {% for todo in recent_todos %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{ todo.title }}
+              <small class="text-muted">{{ todo.due_date }}</small>
+            </li>
+          {% empty %}
+            <li class="list-group-item text-muted text-center">No recent tasks</li>
+          {% endfor %}
       </ul>
     </div>
 
+    {%else%}
     <!-- Dummy Recent Tasks -->
     <div class="mt-5">
       <h4>Recent Tasks</h4>
-      <ul class="list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Finish assignment
-          <small class="text-muted">June 20, 2025</small>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Grocery shopping
-          <small class="text-muted">June 19, 2025</small>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Call manager
-          <small class="text-muted">June 21, 2025</small>
-        </li>
-        <li class="list-group-item text-muted text-center">No more recent tasks</li>
-      </ul>
-    </div>
+
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Task 1
+            <small class="text-muted">June 20, 2025</small>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Task 2
+            <small class="text-muted">June 19, 2025</small>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Task 3
+            <small class="text-muted">June 21, 2025</small>
+          </li>
+          <li class="list-group-item text-muted text-center">No more recent tasks</li>
+        </ul>
+      </div>
+    {%endif%}
+
   </div>
 {% endblock %}

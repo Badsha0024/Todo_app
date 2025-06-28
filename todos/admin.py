@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Task
+from .models import Category, Task, Notification
 
 
 @admin.register(Category)
@@ -19,3 +19,10 @@ class TaskAdmin(admin.ModelAdmin):
     search_fields = ('title', 'description')
     
     ordering = ('user', 'pk',)  # New ordering here
+    
+    
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'message', 'is_read', 'created_at')
+    list_filter = ('is_read', 'created_at')
+    search_fields = ('message',)

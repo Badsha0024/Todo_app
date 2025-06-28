@@ -1,9 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-# from slugify import slugify
-
-
+# from slugify import slugi
 
 # Create your models here.
 class Category(models.Model):
@@ -57,3 +55,21 @@ class Task(models.Model):
     def __str__(self):
         return self.title
 
+class Notification(models.Model):
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    task = models.ForeignKey('Task', on_delete=models.CASCADE, null=True, blank=True)
+    message = models.CharField(max_length=255)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name_plural = "Notifications"
+        
+    def __str__(self):
+        return f"{self.user.username} - {self.message[:20]}"
+        
+        
+        

@@ -41,7 +41,7 @@
 
   <body class="bg-light">
     <!-- Navbar -->
-    {% include 'todos/nav2.html' %}
+    {% include 'todos/nav.html' %}
 
     <!-- Flash Messages -->
     {% include 'todos/messages.html' %}
@@ -58,6 +58,24 @@
       {% include 'todos/footer.html' %}
     </footer>
 
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const notificationDropdown = document.getElementById('notificationDropdown')
+        notificationDropdown.addEventListener('click', function () {
+          fetch("{% url 'mark_notifications_read' %}", {
+            method: 'GET',
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              const badge = notificationDropdown.querySelector('.badge')
+              if (badge) badge.remove()
+            })
+        })
+      })
+    </script>
     <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
