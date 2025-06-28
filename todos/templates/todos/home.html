@@ -1,0 +1,133 @@
+{% extends 'todos/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="min-vh-100 d-flex align-items-center text-center bg-info text-white">
+  <div class="container-fluid">
+    <h1 class="display-3 fw-bold">Stay Organized with TodoApp ✅</h1>
+    <p class="lead mt-3">Track tasks, boost productivity, and manage your time effectively — all in one place.</p>
+    <a href="{% url 'login' %}" class="btn btn-secondary btn-lg mt-4 px-5 py-2">Get Started</a>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-white">
+  <div class="container text-center">
+    <h2 class="mb-5 fw-semibold text-info">Features</h2>
+    <div class="row g-4">
+      
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card text-dark bg-gradient shadow-lg rounded-4 border-0 p-4"
+             style="background: linear-gradient(135deg, #4f46e5, #3b82f6); transition: transform 0.2s ease;">
+          <div class="card-body text-center">
+            <i class="bi bi-list-check fs-1 mb-3 text-primary"></i>
+            <h5 class="text-dark mb-2"><strong>Task Management</strong></h5>
+            <p class="text-dark small">Create, edit, and organize tasks efficiently.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+             style="background: linear-gradient(135deg, #059669, #10b981); transition: transform 0.2s ease;">
+          <div class="card-body text-center">
+            <i class="bi bi-calendar-event fs-1 mb-3 text-warning"></i>
+            <h5 class="text-dark mb-2"><strong>Reminders</strong></h5>
+            <p class="text-dark small">Smart alerts for your task deadlines.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+             style="background: linear-gradient(135deg, #0ea5e9, #38bdf8); transition: transform 0.2s ease;">
+          <div class="card-body text-center">
+            <i class="bi bi-bar-chart-line fs-1 mb-3 text-info"></i>
+            <h5 class="text-dark mb-2"><strong>Dashboard</strong></h5>
+            <p class="text-dark small">Track task progress and stats visually.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+             style="background: linear-gradient(135deg, #f59e0b, #facc15); transition: transform 0.2s ease;">
+          <div class="card-body text-center">
+            <i class="bi bi-lock fs-1 mb-3 text-success"></i>
+            <h5 class="text-dark mb-2"><strong>Secure Access</strong></h5>
+            <p class="text-dark small">Your data is safe and private always.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- How It Works Section -->
+<section class="py-5 bg-light">
+  <div class="container text-center">
+    <h2 class="mb-5 fw-semibold text-info">How It Works</h2>
+    <div class="row g-4 justify-content-center">
+
+      <div class="col-md-6 col-lg-3">
+        <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+             style="background: linear-gradient(135deg, #6366f1, #818cf8); transition: transform 0.2s ease;">
+          <div class="card-body text-center">
+            <i class="bi bi-person-plus fs-1 mb-3 text-success"></i>
+            <h5 class="text-dark mb-2"><strong>Sign Up or Log In</strong></h5>
+            <p class="text-dark small">Access your personal dashboard after login.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+             style="background: linear-gradient(135deg, #14b8a6, #2dd4bf); transition: transform 0.2s ease;">
+          <div class="card-body text-center">
+            <i class="bi bi-pencil-square fs-1 mb-3 text-primary"></i>
+            <h5 class="text-dark mb-2"><strong>Create Tasks</strong></h5>
+            <p class="text-dark small">Add tasks with priority and deadlines easily.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+             style="background: linear-gradient(135deg, #0ea5e9, #38bdf8); transition: transform 0.2s ease;">
+          <div class="card-body text-center">
+            <i class="bi bi-speedometer2 fs-1 mb-3 text-secondary"></i>
+            <h5 class="text-dark mb-2"><strong>Track Progress</strong></h5>
+            <p class="text-dark small">Visualize task statuses in your dashboard.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+             style="background: linear-gradient(135deg, #eab308, #facc15); transition: transform 0.2s ease;">
+          <div class="card-body text-center">
+            <i class="bi bi-check2-circle fs-1 mb-3 text-info"></i>
+            <h5 class="text-dark mb-2"><strong>Update Status</strong></h5>
+            <p class="text-dark small">Mark tasks as complete and stay productive.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA Section -->
+<section class="py-5 text-white text-center bg-secondary">
+  <div class="container">
+    <h4 class="mb-3">Start achieving your goals today!</h4>
+    <a href="{% url 'register' %}" class="btn btn-info btn-lg px-5 py-2">Create Your Free Account</a>
+  </div>
+</section>
+
+{% endblock %}

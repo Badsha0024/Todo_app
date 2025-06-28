@@ -1,0 +1,116 @@
+{% extends 'todos/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">{{ task.title }}</h4>
+                        {% if task.completed %}
+                            <span class="badge bg-success">✔ Completed</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">⏳ Incomplete</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-body">
+                        <div class="mb-3">
+                        <p class="fw-semibold text-secondary mb-1">📌 <strong>Status:</strong></p>
+                        <span class="badge 
+                            {% if task.status == 'C' %}bg-success
+                            {% elif task.status == 'I' %}bg-info text-dark
+                            {% elif task.status == 'P' %}bg-warning text-dark
+                            {% elif task.status == 'O' %}bg-danger
+                            {% else %}bg-secondary
+                            {% endif %}
+                            fs-6 px-3 py-2 shadow-sm">
+                            {{ task.get_status_display }}
+                        </span>
+                        </div>
+
+
+                        <!-- static Task Description -->
+                        <div id="description-view" class="mb-4">
+                            <p class="fw-semibold text-secondary mb-2">📝 <strong>Description:</strong></p>
+
+                            <div class="p-3 rounded border-start border-5 border-primary shadow-sm text-dark"
+                                style="background-color: #f8f9fa; min-height: 100px;">
+                                {{ task.description|default:"<em class='text-muted'>No description provided.</em>"|safe }}
+                            </div>
+
+                            <button class="btn btn-outline-primary btn-sm mt-3" onclick="toggleEdit()">
+                                ✏️ Edit Description
+                            </button>
+                        </div>
+
+                <!-- Hidden Edit Form -->
+                    <div id="description-edit-form" style="display: none;">
+                        <form method="post" action="{% url 'update_description' task.id %}" class="mb-3">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="description" class="form-label"><strong>Edit Description:</strong></label>
+                            <textarea name="description" id="description" class="form-control" rows="3">{{ task.description }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-outline-success btn-sm">💾 Save</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-sm" onclick="toggleEdit()">Cancel</button>
+                        </form>
+                    </div>
+                        
+
+                    
+                        
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                        <p><strong>Due Date:</strong> <span class="text-danger">{{ task.due_date }}</span></p>
+                        <p><strong>Priority:</strong> <span class="badge bg-{{ task.priority|lower }}">{{ task.get_priority_display }}</span></p>
+                        <p><strong>Category:</strong> <span class="badge bg-info text-dark">{{ task.category.name }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                        <p><strong>Created At:</strong> {{ task.created_at|date:"M d, Y h:i A" }}</p>
+                        <p><strong>Last Updated:</strong> {{ task.updated_at|date:"M d, Y h:i A" }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Completion Toggle Form -->
+                    <form method="post" action="{% url 'toggle_complete' task.id %}" class="mt-4">
+                        {% csrf_token %}
+                        <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" name="completed" id="completedCheck"
+
+                                {% if task.completed %} checked {% endif %} onchange="this.form.submit()">
+
+
+                        <label class="form-check-label" for="completedCheck">
+                            Mark as {{ task.completed|yesno:"Incomplete,Complete" }}
+                        </label>
+                        </div>
+                    </form>
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-between">
+                    <div>
+                        <a href="{% url 'edit_task' task.id %}" class="btn btn-outline-primary">✏️ Edit</a>
+                        <a href="{% url 'delete_task' task.id %}" class="btn btn-outline-danger">🗑️ Delete</a>
+                    </div>
+                    <a href="{% url 'task_list' %}" class="btn btn-outline-primary">← Back to Task List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+  function toggleEdit() {
+    const viewDiv = document.getElementById('description-view');
+    const formDiv = document.getElementById('description-edit-form');
+    viewDiv.style.display = (viewDiv.style.display === 'none') ? 'block' : 'none';
+    formDiv.style.display = (formDiv.style.display === 'none') ? 'block' : 'none';
+  }
+</script>
+{% endblock %}
+

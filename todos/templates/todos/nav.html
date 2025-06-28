@@ -1,64 +1,90 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-2">
+<nav class="navbar navbar-expand-lg navbar-light bg-info shadow-sm py-2">
   <div class="container-fluid">
-
     <!-- Logo & Brand -->
-    <a class="navbar-brand d-flex align-items-center" href="{% url 'dashboard' %}">
-      <img src="{% static 'todos/logo.png' %}" alt="Logo" height="40" class="me-2 rounded-circle">
-      <span class="fw-bold text-primary">TodoMaster</span>
-    </a>
+    {% comment %} <a class="navbar-brand d-flex align-items-center text-primary" href="{% url 'home' %}"> {% endcomment %}
+      <img src="{% static 'todos/logo.png' %}" alt="Logo" height="40" class="me-2 rounded-circle border border-primary" />
+      <strong>Task Master</strong>
+    {% comment %} </a> {% endcomment %}
 
     <!-- Mobile Toggler -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
-      aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
     <!-- Main Navbar -->
     <div class="collapse navbar-collapse" id="navbarMain">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
         <li class="nav-item">
-          <a class="nav-link fw-semibold" href="{% url 'dashboard' %}">Dashboard</a>
+          <a class="nav-link fw-semibold text-dark" href="{% url 'dashboard' %}">Dashboard</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link fw-semibold" href="{% url 'task_list' %}">My Tasks</a>
+          <a class="nav-link fw-semibold text-dark" href="{% url 'task_list' %}">My Tasks</a>
         </li>
 
+        <li class="nav-item">
+          <a class="nav-link fw-semibold text-dark" href="{% url 'create_task' %}">Add Task</a>
+        </li>
+
+        <!-- Notification Icon -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle fw-semibold" href="#" id="categoryDropdown" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
-          <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-            <li><a class="dropdown-item" href="{% url 'category_todos' 1 %}">Work</a></li>
-            <li><a class="dropdown-item" href="{% url 'category_todos' 2 %}">Personal</a></li>
-            <li><a class="dropdown-item" href="{% url 'category_todos' 3 %}">Fitness</a></li>
-            <li><a class="dropdown-item" href="{% url 'category_todos' 4 %}">Study</a></li>
-            <li><a class="dropdown-item" href="{% url 'category_todos' 5 %}">Others</a></li>
-          </ul>
-        </li>
+          <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            🔔 <strong> Notifications </strong>
+            {% if unread_count %}
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ unread_count }}
+                <span class="visually-hidden">unread messages</span>
+              </span>
+            {% endif %}
 
-        <li class="nav-item">
-          <a class="nav-link fw-semibold" href="{% url 'create_task' %}">Add Task</a>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown" style="min-width: 300px;">
+            {% for note in notifications %}
+              <li>
+                {% if note.task %}
+                  <a class="dropdown-item d-flex align-items-start gap-2" href="{% url 'task_detail' note.task.id %}">
+                    <i class="bi bi-info-circle-fill text-primary fs-5"></i>
+                    <div>
+                      <div>{{ note.message }}</div>
+                      <small class="text-muted">{{ note.created_at|timesince }} ago</small>
+                    </div>
+                  </a>
+                {% else %}
+                  <div class="dropdown-item d-flex align-items-start gap-2">
+                    <i class="bi bi-info-circle-fill text-secondary fs-5"></i>
+                    <div>
+                      <div>{{ note.message }}</div>
+                      <small class="text-muted">{{ note.created_at|timesince }} ago</small>
+                    </div>
+                  </div>
+                {% endif %}
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+            {% endfor %}
+          </ul>
         </li>
       </ul>
 
-      <!-- Right Side: Search and Auth -->
+      <!-- Search & Auth -->
       <form class="d-flex me-3" method="get" action="{% url 'search_tasks' %}">
-        <input class="form-control me-2" type="search" name="q" placeholder="Search..." aria-label="Search" required>
+        <input class="form-control me-2" type="search" name="q" placeholder="Search..." aria-label="Search" required />
         <button class="btn btn-outline-primary" type="submit">🔍</button>
       </form>
 
       {% if user.is_authenticated %}
         <div class="dropdown">
-          <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            👤 {{ user.username }}
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+          <a class="btn btn-outline-dark dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">👤 {{ user.username }}</a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a>
+            </li>
           </ul>
         </div>
       {% else %}

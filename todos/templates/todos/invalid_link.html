@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4 text-center p-5">
+
+          <div class="text-danger mb-4">
+            <i class="bi bi-x-circle-fill display-4"></i>
+            <h3 class="mt-3">Invalid or Expired Link</h3>
+            <p class="text-muted">The password reset link is invalid, expired, or already used.</p>
+          </div>
+
+          <a href="{% url 'forgot_password' %}" class="btn btn-outline-danger mt-3">
+            Request New Reset Link
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

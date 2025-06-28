@@ -1,11 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-# from slugify import slugify
 
-
-
-# Create your models here.
+# Create your models here
+    
 class Category(models.Model):
     
     name = models.CharField(max_length=100)
@@ -57,3 +55,46 @@ class Task(models.Model):
     def __str__(self):
         return self.title
 
+class Notification(models.Model):
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    task = models.ForeignKey('Task', on_delete=models.CASCADE, null=True, blank=True)
+    message = models.CharField(max_length=255)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name_plural = "Notifications"
+        
+    def __str__(self):
+        return f"{self.user.username} - {self.message[:20]}"
+        
+        
+def user_profile_pic_path(instance, filename):
+    # instance is the UserProfile model
+    # instance.user gives you the User object
+    username = getattr(instance.user, 'username', 'default_user')
+    return f"profile_pics/{username}/{filename}"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    profile_picture = models.ImageField(upload_to=user_profile_pic_path, null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.user.username}'s profile"
+    
+    
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def is_expired(self):
+        from django.utils import timezone
+        return timezone.now() > self.created_at + timezone.timedelta(hours=1)
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.token}"
