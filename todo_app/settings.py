@@ -17,6 +17,10 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 # ALLOWED_HOSTS for Render
 RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://localhost:8000',  # existing entries
+    'https://localhost:1234'  # add this line
+]
 
 if DEBUG:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
@@ -100,9 +104,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='example@email.com')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
-# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 

@@ -9,6 +9,8 @@ urlpatterns = [
     path('', views.home_view, name='home'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('task_list/', views.task_list, name = 'task_list'),
+    path('tasks/cards/', views.task_card_view, name='task_card_list'),
+
     path('task_list/completed/', views.completed_tasks_view, name='completed_tasks'),
     path('task_list/upcoming/', views.upcoming_tasks_view, name='upcoming_tasks'),
     path('task_list/overdue', views.overdue_tasks_view, name='overdue_tasks'),

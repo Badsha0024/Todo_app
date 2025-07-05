@@ -1,12 +1,14 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-light bg-info shadow-sm py-2">
   <div class="container-fluid">
-    <!-- Logo & Brand -->
-    {% comment %} <a class="navbar-brand d-flex align-items-center text-primary" href="{% url 'home' %}"> {% endcomment %}
-      <img src="{% static 'todos/logo.png' %}" alt="Logo" height="40" class="me-2 rounded-circle border border-primary" />
-      <strong>Task Master</strong>
-    {% comment %} </a> {% endcomment %}
 
+
+    <!-- Logo & Brand -->
+    <a class="navbar-brand d-flex align-items-center text-primary" href="{% url 'home' %}">
+      <img src="{% static 'todos/logo.png' %}" alt="Logo" height="40" class="me-2 rounded-circle border border-primary" onerror="this.style.display='none';this.insertAdjacentHTML('afterend', '<span class=\'me-2 fs-3\'>📝</span>');" />
+      <strong>Task Master</strong>
+    </a>
+      
     <!-- Mobile Toggler -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 

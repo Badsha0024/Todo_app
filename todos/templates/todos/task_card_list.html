@@ -68,6 +68,7 @@
 {% block content %}
 
 <div class="container py-4">
+
   <!-- Header with Add Button -->
   <div class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
@@ -78,16 +79,16 @@
 
     <div class="d-flex gap-2">
       {% if request.resolver_match.url_name == "task_card_list" %}
-        <a href="{% url 'task_list' %}" class="btn btn-outline-primary" title="Switch to List View">
+        <a href="{% url 'task_list' %}" class="btn btn-outline-secondary" title="Switch to List View">
           📋 List View
         </a>
       {% else %}
-        <a href="{% url 'task_card_list' %}" class="btn btn-outline-primary" title="Switch to Card View">
+        <a href="{% url 'task_card_list' %}" class="btn btn-outline-secondary" title="Switch to Card View">
           🗂️ Card View
         </a>
       {% endif %}
 
-      <a href="{% url 'create_task' %}" class="btn btn-outline-primary" title="Add New Task">
+      <a href="{% url 'create_task' %}" class="btn btn-primary" title="Add New Task">
         ➕ Add New Task
       </a>
     </div>
@@ -95,20 +96,20 @@
 
 
   <!-- Search and Filter -->
-   {% if not page_title%}
-  <form method="get" class="row mb-4" action="{% url 'search_tasks' %}">
-    <div class="col-md-8 mb-2 mb-md-0">
-      <input type="text" name="q" class="form-control" placeholder="🔍 Search tasks..." value="{{ request.GET.q }}">
-    </div>
-    <div class="col-md-4">
-      <select name="category" class="form-select" onchange="this.form.submit()">
-        <option value="">📂 Filter by Category</option>
-        {% for cat in categories %}
-          <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-  </form>
+   {% if not page_title %}
+    <form method="get" class="row mb-4" action="{% url 'search_tasks' %}">
+        <div class="col-md-8 mb-2 mb-md-0">
+        <input type="text" name="q" class="form-control" placeholder="🔍 Search tasks..." value="{{ request.GET.q }}">
+        </div>
+        <div class="col-md-4">
+        <select name="category" class="form-select" onchange="this.form.submit()">
+            <option value="">📂 Filter by Category</option>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+        </div>
+    </form>
   {%endif%}
 
   <!-- Conditional Header -->

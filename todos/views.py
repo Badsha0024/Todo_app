@@ -75,10 +75,13 @@ def logout_View(request):
 
     messages.success(request, "You have been logged out successfully.")
     logout(request)
-    return redirect('login')  # or 'dashboard'
-# views.py
+    return redirect('login')
+
+
 def home_view(request):
     return render(request, 'todos/home.html')
+
+    
 
 @login_required
 def dashboard(request):
@@ -159,9 +162,39 @@ def create_task(request):
 
 
 @login_required
+def task_card_view(request):
+    tasks = Task.objects.filter(user=request.user).order_by('-status', 'due_date', '-created_at')
+    categories = Category.objects.all()
+
+    query = request.GET.get("q", "")
+    category_id = request.GET.get("category", "")
+
+    category_name = categories.filter(id=category_id).first() if category_id else None
+
+    if query:
+        tasks = tasks.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+
+    if category_id:
+        tasks = tasks.filter(category_id=category_id)
+
+    context = {
+        'tasks': tasks,
+        'query': query,
+        'categories': categories,
+        'selected_category': category_id,
+        'category_name': category_name,
+        'page_title': None
+    }
+
+    return render(request, 'todos/task_card_list.html', context)
+
+
+@login_required
 def task_list(request):
     
-    tasks = Task.objects.filter(user=request.user).order_by('status', '-created_at')
+    tasks = Task.objects.filter(user=request.user).order_by('-status', 'due_date', '-created_at')
     categories = Category.objects.all()
     
     query = request.GET.get("q", "")
@@ -185,7 +218,7 @@ def task_list(request):
         'category_name': category_name,
     }
     
-    return render(request, 'todos/task_list.html', context)
+    return render(request, 'todos/task_list_LISTView.html', context)
 
 
 @login_required
@@ -393,6 +426,7 @@ def mask_email(email):
     return name[:visible] + "***@" + domain
 
 def forgot_password(request):
+    
     form = ForgotPasswordForm()
     if request.method == 'POST':
         form = ForgotPasswordForm(request.POST)

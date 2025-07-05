@@ -1,0 +1,220 @@
+{% extends 'todos/base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <p class="lead">Manage your tasks efficiently and stay organized Good.</p>
+  <div class="container py-5">
+
+    
+     <!-- Search and Filter -->
+    <form method="get" class="row mb-4" action="{% url 'search_tasks' %}">
+    <div class="col-md-8 mb-2 mb-md-0">
+      <input type="text" name="q" class="form-control" placeholder="🔍 Search tasks..." value="{{ request.GET.q }}">
+    </div>
+    <div class="col-md-4">
+      <select name="category" class="form-select" onchange="this.form.submit()">
+        <option value="">📂 Filter by Category</option>
+        {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </form>
+
+    <!-- Add Task Field -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="m-0">Welcome, {{ user.username }} 👋</h2>
+      <a href="{% url 'create_task' %}" class="btn btn-primary">➕ Add New Task</a>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="row g-4">
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <a href="{% url 'task_list' %}?source=AllTasks" class="text-decoration-none">
+          <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+              style="background: linear-gradient(135deg, #4f46e5, #3b82f6); transition: transform 0.2s ease;">
+            
+            <div class="card-body text-center">
+              <h5 class="text-secondary mb-2"><strong>Total Tasks</strong></h5>
+              <h2 class="text-info display-6 fw-bold">{{ total_tasks|default:'Empty' }}</h2>
+            </div>
+          </div>
+        </a>
+      </div>
+
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <a href="{% url 'completed_tasks' %}" class="text-decoration-none">
+          <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+              style="background: linear-gradient(135deg, #4f46e5, #3b82f6); transition: transform 0.2s ease;">
+            
+            <div class="card-body text-center">
+                <h5 class="text-success mb-2">
+                <strong>
+                  <i class="bi bi-check-circle-fill me-1"></i>Completed
+                </strong>
+                </h5>
+              <h2 class="text-info display-6 fw-bold">{{ completed_tasks | default:' Empty' }}</h2>
+            </div>
+          </div>
+        </a>
+      </div>
+      
+
+
+
+       <div class="col-md-6 col-lg-3 mb-4">
+        <a href="{% url 'upcoming_tasks' %}" class="text-decoration-none text-dark">
+          <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+              style="background: linear-gradient(135deg, #4f46e5, #3b82f6); transition: transform 0.2s ease;">
+            
+            <div class="card-body text-center">
+              <h5 class="text-warning mb-2"><strong>Upcoming</strong></h5>
+              <h2 class="text-info display-6 fw-bold">{{ upcoming_tasks | default:' Empty' }}</h2>
+            </div>
+          </div>
+        </a>
+      </div>
+      
+
+      <div class="col-md-6 col-lg-3 mb-4">
+        <a href="{% url 'overdue_tasks' %}" class="text-decoration-none text-dark">
+          <div class="card text-white bg-gradient shadow-lg rounded-4 border-0 p-4"
+              style="background: linear-gradient(135deg, #4f46e5, #3b82f6); transition: transform 0.2s ease;">
+            
+            <div class="card-body text-center">
+              <h5 class="text-danger mb-2"><strong>Overdue</strong></h5>
+              <h2 class="text-info display-6 fw-bold">{{ overdue_tasks|default:' Empty' }}</h2>
+            </div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+
+
+    <!-- Recent Tasks -->
+<div class="mt-5">
+    <h4 class="mb-3">📝 Your Recent Tasks</h4>
+
+    <ul class="list-group list-group-flush">
+      {% for todo in recent_todos %}
+    {% with border_color="#cccccc" %}
+      {% if todo.priority == 'H' %}
+        {% with border_color="#dc3545" %}
+          <li class="list-group-item rounded-3 mb-2 shadow-sm px-4 py-3"
+              style="background: #fdfdfd; border-left: 5px solid {{ border_color }};">
+        {% endwith %}
+      {% elif todo.priority == 'M' %}
+        {% with border_color="#ffc107" %}
+          <li class="list-group-item rounded-3 mb-2 shadow-sm px-4 py-3"
+              style="background: #fdfdfd; border-left: 5px solid {{ border_color }};">
+        {% endwith %}
+      {% elif todo.priority == 'L' %}
+        {% with border_color="#198754" %}
+          <li class="list-group-item rounded-3 mb-2 shadow-sm px-4 py-3"
+              style="background: #fdfdfd; border-left: 5px solid {{ border_color }};">
+        {% endwith %}
+      {% else %}
+        <li class="list-group-item rounded-3 mb-2 shadow-sm px-4 py-3"
+            style="background: #fdfdfd; border-left: 5px solid {{ border_color }};">
+      {% endif %}
+
+          <div class="d-flex justify-content-between align-items-start">
+            <a href="{% url 'task_detail' todo.id %}" class="text-decoration-none text-dark">
+              <div>
+                <h6 class="mb-1 fw-bold">{{ todo.title }}</h6>
+                <small class="text-muted">
+                  Due: {{ todo.due_date|date:"M d, Y" }} • 
+                  Status: <span class="badge 
+                    {% if todo.status == 'C' %}bg-success
+                    {% elif todo.status == 'O' %}bg-danger
+                    {% else %}bg-warning text-dark{% endif %}">
+                    {{ todo.get_status_display }}
+                  </span> • 
+                  Priority: <span class="text-capitalize">{{ todo.get_priority_display }}</span>
+                  {% if todo.category %}
+                    • Category: <em>{{ todo.category }}</em>
+                  {% endif %}
+                </small>
+              </div>
+            </a>
+            {% if todo.status == 'C' %}
+              <i class="bi bi-check-circle-fill text-success fs-4" title="Completed"></i>
+            {% elif todo.status == 'O' %}
+              <i class="bi bi-exclamation-circle-fill text-danger fs-4" title="Overdue"></i>
+            {% else %}
+              <i class="bi bi-hourglass-split text-warning fs-4" title="In Progress"></i>
+            {% endif %}
+          </div>
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted text-center rounded shadow-sm py-3">
+          No recent tasks
+        </li>
+      {% endfor %}
+    </ul>
+</div>
+
+<!-- Dummy Recent Tasks -->
+{% if not recent_todos %}
+  <div class="mt-5">
+    <h4 class="mb-3">📝 Recent Tasks</h4>
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item rounded-3 mb-2 shadow-sm px-4 py-3"
+          style="background: #fdfdfd; border-left: 5px solid #ffc107;">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h6 class="mb-1 fw-bold">Task 1</h6>
+            <small class="text-muted">
+              Due: June 20, 2025 • 
+              Status: <span class="badge bg-warning text-dark">In Progress</span> • 
+              Priority: Medium • Category: <em>Study</em>
+            </small>
+          </div>
+          <i class="bi bi-hourglass-split text-warning fs-4" title="In Progress"></i>
+        </div>
+      </li>
+
+      <li class="list-group-item rounded-3 mb-2 shadow-sm px-4 py-3"
+          style="background: #fdfdfd; border-left: 5px solid #dc3545;">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h6 class="mb-1 fw-bold">Task 2</h6>
+            <small class="text-muted">
+              Due: June 19, 2025 • 
+              Status: <span class="badge bg-danger">Overdue</span> • 
+              Priority: High • Category: <em>Work</em>
+            </small>
+          </div>
+          <i class="bi bi-exclamation-circle-fill text-danger fs-4" title="Overdue"></i>
+        </div>
+      </li>
+
+      <li class="list-group-item rounded-3 mb-2 shadow-sm px-4 py-3"
+          style="background: #fdfdfd; border-left: 5px solid #198754;">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h6 class="mb-1 fw-bold">Task 3</h6>
+            <small class="text-muted">
+              Due: June 21, 2025 • 
+              Status: <span class="badge bg-success">Completed</span> • 
+              Priority: Low • Category: <em>Personal</em>
+            </small>
+          </div>
+          <i class="bi bi-check-circle-fill text-success fs-4" title="Completed"></i>
+        </div>
+      </li>
+
+      <li class="list-group-item text-muted text-center rounded shadow-sm py-3">
+        No more recent tasks
+      </li>
+    </ul>
+  </div>
+{% endif %}
+
+  </div>
+{% endblock %}
